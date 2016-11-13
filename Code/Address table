@@ -1,0 +1,7 @@
+CREATE TABLE addresses (
+    id int,
+    house number smallint,
+    street name varchar,
+    post code smallint,
+    city varchar,
+    );
