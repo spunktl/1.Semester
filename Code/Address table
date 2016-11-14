@@ -1,21 +1,72 @@
-CREATE TABLE addresses (
-    id int,
-    house number smallint,
-    street name varchar,
-    post code smallint,
-    city varchar,
-    );
+Step 1:
+CREATE TABLE Adresser (
+ id varchar(100),
+ status integer,
+oprettet date,
+ændret date,
+  vejkode integer,
+   vejnavn varchar,
+    adresseringsvejnavn varchar,
+     husnr varchar,
+      etage varchar,
+       dør varchar,
+        supplerendebynavn varchar(100),
+         postnr integer,
+          postnrnavn char(100),
+	      stormodtagerpostnr varchar,
+	      stormodtagerpostnrnavn varchar,
+           kommunekode integer,
+           kommunenavn varchar(100),
+           ejelavkode integer,
+           ejerlavnavn varchar(100),
+           matrikelnr varchar(50),
+           esrejendomsnr integer,
+           etrs89koordinat_oest float,
+           etrs89koordinat_nord float,
+           wgs84koordinat_bredde float,
+           wgs84koordinat_længde float,
+           nøjagtighed varchar,
+           kilde integer,
+	tekniskstandard varchar,
+	tekstretning varchar,
+	ddkn_m100 varchar,
+	ddkn_km1 varchar,
+	ddkn_km10 varchar,
+	adressepunktændringsdato date,
+	adgangsadresseid varchar,
+	adgangsadresse_status integer,
+	adgangsadresse_oprettet date,
+	adgangsadresse_ændret date,
+	regionskode integer,
+	regionsnavn varchar,
+	jordstykke_ejerlavnavn varchar,
+	kvhx varchar,
+	sognekode integer,
+	sognenavn varchar,
+	politikredskode integer,
+	politikredsnavn varchar,
+	retskredskode integer,
+	retskredsnavn varchar,
+	opstillingskredskode integer,
+	opstillingskredsnavn varchar,
+	zone varchar,
+	jordstykke_ejerlavkode integer,
+	jordstykke_matrikelnr varchar,
+	jordstykke_esrejendomsnr integer,
+	kvh varchar,
+	højde float);
 
-    jhgdjf
+Step2:
+Import data from csv into the table. Remember set csv, Latin1, header and delimiter.
 
-    test push commit
+Step3:
+Alter table Adresser add column geom geometry;
 
-    adlgkjasdælkfjasd
+Step4:
+UPDATE adresser SET geom = ST_SetSRID(ST_MakePoint(etrs89koordinat_oest, etrs89koordinat_nord), 25832)
 
-    asdfjknaæsdf
+Step5:
+CREATE INDEX adresser_copenhagen ON adresser USING GIST (geom);
 
-    change1
 
-    Adress table change2232
-
-    change2asfjhaskdfh
+NOTE: Still not converting UTF8 to Latin1 in the text, only in the headers. (no æ,ø,å)
