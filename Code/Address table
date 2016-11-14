@@ -5,3 +5,5 @@ CREATE TABLE addresses (
     post code smallint,
     city varchar,
     );
+
+    jhgdjf
