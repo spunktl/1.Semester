@@ -12,6 +12,10 @@
     <!--include geojason file-->
     <script src="data/bydel.geojson"></script>
     <script src="data/parker.geojson"></script>
+      <!--include geosearch files-->
+    <script src="lib/L.Geosearch-develop/src/js/l.control.geosearch.js"></script>
+    <script src="lib/L.Geosearch-develop/src/js/l.geosearch.provider.openstreetmap.js"></script>
+    <link rel="stylesheet" href="lib/L.Geosearch-developer/src/css/l.geosearch.css" />
     <style type="text/css">
         /*to get a full screen map*/
         body {
@@ -40,6 +44,11 @@
         maxZoom: 18,
         id:'clarineo.23o81n9e',
         accessToken:'pk.eyJ1IjoiY2xhcmluZW8iLCJhIjoiY2l2aDJocjZ0MDA1ajJvb3djeTdidWxyaSJ9.HVE2DplZgfv5T4FSUqah7A'
+    }).addTo(mymap);
+
+    //    add geosearch feature
+    new L.Control.GeoSearch({
+        provider: new L.GeoSearch.Provider.OpenStreetMap()
     }).addTo(mymap);
 
     //    load geoJson files-->
