@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset= "utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Semester 1 Group Project</title>
+    <!--Leaflet-->
+    <!--include leaflet CSS-->
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
+	<script src="jquery/jquery-3.1.1.min.js"></script>
+    <!--include leaflet javascript file-->
+    <script src="lib/leaflet/leaflet.js"></script>
+	<script type="text/javascript" src="dist/leaflet.ajax.js"></script>
+	<!--include geosearch files-->
+	<link rel="stylesheet" href="lib/L.GeoSearch-develop/src/css/l.geosearch.css" />
+    <script src="lib/L.GeoSearch-develop/src/js/l.control.geosearch.js"></script>
+    <script src="lib/L.GeoSearch-develop/src/js/l.geosearch.provider.openstreetmap.js"></script>
+	<!--include geoJson file-->
+    <style type="text/css">
+    <!--to get a full screen map-->
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body,#mapid{
+            height:100%;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+<!--div element with id where you want your map to be-->
+<div id="mapid"></div>
+
+<script type="text/javascript" src="http://leafletjs.com/examples/map-panes/eu-countries.js"></script>
+<script>
+
+
+
+
+    //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
+    var mymap = L.map('mapid').setView([55.676, 12.568], 12);
+	
+    <!--load a tile layer Mapbox Streets tile layer-->
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery � <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id:'clarineo.23o81n9e',
+        accessToken:'pk.eyJ1IjoiY2xhcmluZW8iLCJhIjoiY2l2aDJocjZ0MDA1ajJvb3djeTdidWxyaSJ9.HVE2DplZgfv5T4FSUqah7A'
+    }).addTo(mymap);
+	
+	new L.Control.GeoSearch({
+        provider: new L.GeoSearch.Provider.OpenStreetMap(),
+        showPopup: true
+    }).addTo(mymap);
+
+    //    load geoJson files-->
+//TEST WITH OTHER BASEMAP
+$(document).ready(function(){
+$.ajax({
+	type: "POST",
+	url: "php/age.php",
+	data: "adresse=distriktsnavnrode",
+	success: function(msg){
+	//alert(msg);
+	console.log(msg);
+	var geojsonphp2 = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
+     layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong><br/>") 
+	  }
+	  }).addTo(mymap);
+	}
+	});
+});
+	; 
+
+//var geojsonphp2 = new L.GeoJSON.addTo(mymap);
+
+
+   /*    load geoJson files-->
+	var geojsonphp2 = new L.GeoJSON.AJAX(["php/age.php?adresse=text"],{onEachFeature:function( feature, layer ){
+     layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong><br/>")
+	//  }
+	//  }).addTo(mymap);
+//	 function onEachFeature( feature, layer){
+//      var popupContent = feature.properties.distriktsnavnrode;
+//	  layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong>)
+	 
+//TEST WITH OTHER BASEMAP
+//function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+ //   if (feature.properties && feature.properties.distriktsnavnrode) {
+  //      layer.bindPopup(feature.properties.distriktsnavnrode);
+ //   }
+//}
+*/
+</script>
+</body>
+</html>
+
