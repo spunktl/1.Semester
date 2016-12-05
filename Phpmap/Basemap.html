@@ -27,15 +27,31 @@
             width:100%;
         }
     </style>
+
+    <script type=" text/javascript">
+        function addListeners() {
+            if(window.addEventListener){ // if the window.addEventListener function is available for use then we execute below code
+                document.getElementById('myradio').addEventListener("click", radio1func, false);
+            } else if (window.attachEvent) { //added for internet explorer previous to IE9
+
+            }
+            //Event listener functions
+            function radio1func () {
+                alert(this.id+":mouse-click makes script run"); // alert to be replaced by parks query
+            }
+        }
+        window.onload = addListeners; // when page is opened, addListeners function will fire off
+    </script>
+
 </head>
+
 <body>
 <!--div element with id where you want your map to be-->
 <div id="mapid"></div>
 
 <script type="text/javascript" src="http://leafletjs.com/examples/map-panes/eu-countries.js"></script>
+
 <script>
-
-
 
 
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
@@ -51,30 +67,30 @@
 	
 	new L.Control.GeoSearch({
         provider: new L.GeoSearch.Provider.OpenStreetMap(),
-        showPopup: true
+        //showPopup: true
     }).addTo(mymap);
 
-    //    load geoJson files-->
-//TEST WITH OTHER BASEMAP
+    mymap.on('geosearch_showlocation', function (result) {
+        L.marker([result.x, result.y]).addTo(mymap)
+    });
+
+
+    // Function to add all parks and automatically show when document loads
 $(document).ready(function(){
 $.ajax({
 	type: "POST",
-	url: "php/age.php",
-	data: "adresse=distriktsnavnrode",
+	url: "php/park.php",
+    //data: data,
 	success: function(msg){
 	//alert(msg);
 	console.log(msg);
-	var geojsonphp2 = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong><br/>") 
+	var parklocations = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
+     layer.bindPopup( "<strong>" + feature.properties.kommune + "</strong><br/>")
 	  }
 	  }).addTo(mymap);
 	}
 	});
 });
-	; 
-
-//var geojsonphp2 = new L.GeoJSON.addTo(mymap);
-
 
    /*    load geoJson files-->
 	var geojsonphp2 = new L.GeoJSON.AJAX(["php/age.php?adresse=text"],{onEachFeature:function( feature, layer ){
@@ -94,6 +110,11 @@ $.ajax({
 //}
 */
 </script>
+
+<form name="formA">
+    <input type="radio" name="myradio" value="park"/>
+</form>
+
 </body>
 </html>
 

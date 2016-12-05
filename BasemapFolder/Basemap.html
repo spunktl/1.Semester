@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
+    <!-- Requirements:
+    The following files make up the website:
+        - Basemap.html
+        - XXX.php
+        - Leaflet:
+            Leaflet library
+            Leaflet GeoSearch plugin
+        - Javascript
+            Jquery
+    -->
+
+    <title>Semester 1 Group Project</title>
+
     <meta charset= "utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Semester 1 Group Project</title>
+
     <!--Leaflet-->
-    <!--include leaflet CSS-->
-    <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
-    <!--include leaflet javascript file-->
-    <script src="lib/leaflet/leaflet.js"></script>
-    <!--include geojason file-->
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>  <!--include leaflet CSS-->
+    <script src="lib/leaflet/leaflet.js"></script>  <!--include leaflet javascript file-->
+    <script type="text/javascript" src="dist/leaflet.ajax.js"></script>
+    <!--Jquery-->
+    <script src="jquery/jquery-3.1.1.min.js"></script>
+    <!--Geojson-->
     <script src="data/bydel.geojson"></script>
     <script src="data/parker.geojson"></script>
-      <!--include geosearch files-->
+    <!--Geosearch-->
     <script src="lib/L.Geosearch-develop/src/js/l.control.geosearch.js"></script>
     <script src="lib/L.Geosearch-develop/src/js/l.geosearch.provider.openstreetmap.js"></script>
     <link rel="stylesheet" href="lib/L.Geosearch-developer/src/css/l.geosearch.css" />
+
     <style type="text/css">
         /*to get a full screen map*/
         body {
@@ -27,15 +44,17 @@
             width:100%;
         }
     </style>
+
 </head>
+
 <body>
-<!--div element with id where you want your map to be-->
-<div id="mapid"></div>
 
-<script>
+    <!--div element with id where you want your map to be-->
+    <div id="mapid"></div>
 
+    <script>
 
-    //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
+    //<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
 
     <!--load a tile layer Mapbox Streets tile layer-->
@@ -46,12 +65,12 @@
         accessToken:'pk.eyJ1IjoiY2xhcmluZW8iLCJhIjoiY2l2aDJocjZ0MDA1ajJvb3djeTdidWxyaSJ9.HVE2DplZgfv5T4FSUqah7A'
     }).addTo(mymap);
 
-    //    add geosearch feature
+    <!--add geosearch feature-->
     new L.Control.GeoSearch({
         provider: new L.GeoSearch.Provider.OpenStreetMap()
     }).addTo(mymap);
 
-    //    load geoJson files-->
+    <!--load geoJson files-->
 
     var parkerLayer = L.geoJson(parker);
     var parkerStyle = {
@@ -78,6 +97,13 @@
     }).addTo(mymap);
 
     var marker = L.marker([55.676, 12.568]).bindPopup('Rådhuspladsen').addTo(mymap);
+
+    <!-- This javascript block sets up our Jquery code -->
+    //<script type="text/javascript">
+
+    <!-- This javascript block sets up the non-Jquery code -->
+    //<script>
+    // Removes current GeoJSON objects and retrieves new ones based on user search input (i.e functions)
 
 </script>
 </body>
