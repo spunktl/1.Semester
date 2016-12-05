@@ -35,7 +35,7 @@
 <h1>MAP WITH A BUTTON</h1>
 <p id="showdata"></p>
 <button onclick="sqlfunction()"> GO SQL! </button>
-<button onclick=""> Refresh! </button>
+<button onclick="sqlgetjson"> sqlgetjson test </button>
 <!-- TEST FUNCTION-->
 <input type="text" onkeydown="testfunction()">
 
@@ -47,8 +47,8 @@
 
 var adressedata;
 var geojsonphp;
-var adress = "adresse=Grundtvigsvej 44";
-
+var adress = "Guldbergsgade 101";
+var agedata;
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
 
@@ -67,9 +67,38 @@ var adress = "adresse=Grundtvigsvej 44";
 
     //    load geoJson files-->
 //TEST WITH OTHER BASEMAP
-
-
 function sqlfunction(){
+    //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
+$.getJSON('php/Adressgetjson.php?adresse=' + adress, function(msg){
+    console.log(msg);
+        adressedata = msg;
+        //alert(msg);
+	var geojsonphp3 = new L.GeoJSON(msg,{onEachFeature:function( feature, layer ){
+     layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
+	  }
+	  }).addTo(mymap);
+
+
+//document.getElementById("showdata").innerHTML =  adressedata.features["0"].properties.adresse;
+})
+
+//function sqlfunction(){
+    //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
+$.getJSON('php/age.php?adresse=' + adress, function(data) {
+
+    agedata = data;
+    console.log(agedata);
+    //alert(msg);
+    var geojsonphp4 = new L.GeoJSON(data, {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup("<strong>" + feature.properties.rodenavn + "</strong><br/>")
+        }
+    }).addTo(mymap);
+})
+};
+
+/*
+function sqlfunction1(){
 $.ajax({
 	type: "POST",
 	url: "php/Adress.php",
@@ -106,9 +135,9 @@ $.ajax({
     });
 
 };
+*/
 //function testfunction(){alert(adressedata)}
-function testfunction(){geojsonphp = new L.GeoJSON(jQuery.parseJSON(adressedata)); //var data2 = jQuery.parseJSON(adressedata);
-    alert(geojsonphp)};
+function testfunction(){document.getElementById("showdata").innerHTML =  adressedata.features["0"].properties.adresse};
      // document.getElementById("showdata").innerHTML =  data2.features.properties.adresse + data2.features.properties.vejnavn
 
     //var geojsonphp2 = new L.GeoJSON.addTo(mymap);
