@@ -34,7 +34,7 @@ if (!$conn) {
 }
 
 # Build SQL SELECT statement and return the geometry as a GeoJSON element in EPSG: 4326
-$sql = "SELECT rode_nr, " . $_POST['rodenavn'] . ", st_asgeojson(geom) AS geojson FROM socio_data";
+$sql = "SELECT adresse, vejnavn, st_asgeojson(geom) AS geojson FROM adresser WHERE (vejnavn || ' ' || husnr) = '" . $_POST['adresse'] . "' limit 1";
 
 //$_POST['adresse']
 // . pg_escape_string( $_POST['adresse'] ) . 
