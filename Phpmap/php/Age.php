@@ -27,7 +27,7 @@ function escapeJsonString($value) { # list from www.json.org: (\b backspace, \f 
  
 
 # Connect to PostgreSQL database
-$conn = pg_connect("dbname='test' user='postgres' password='admin' host='localhost'");
+$conn = pg_connect("dbname='Semester1' user='postgres' password='postgres' host='localhost:5433'");
 if (!$conn) {
     echo "Not connected : " . pg_error();
     exit;
