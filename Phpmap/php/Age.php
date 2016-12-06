@@ -34,7 +34,7 @@ if (!$conn) {
 }
 # If no input to adress, echo error message. Otherwise continue and set variable adress = input from GET function.
 if (empty($_GET['adresse'])) {
-    echo "missing required paramater: <i>adresse</i>";
+    echo "missing required paramater: <i>adresse_input</i>";
     exit;
 } else
     $adresse = $_GET['adresse'];

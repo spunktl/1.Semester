@@ -34,6 +34,7 @@
 <!--div element with id where you want your map to be-->
 <h1>MAP WITH A BUTTON</h1>
 <p id="showdata"></p>
+<p id="showdata2"></p>
 <button onclick="sqlfunction()"> GO SQL! </button>
 <button onclick="sqlgetjson"> sqlgetjson test </button>
 <!-- TEST FUNCTION-->
@@ -44,11 +45,12 @@
 <script type="text/javascript" src="http://leafletjs.com/examples/map-panes/eu-countries.js"></script>
 <script>
 
-
+var nongeo;
 var adressedata;
 var geojsonphp;
 var adress = "Guldbergsgade 101";
 var agedata;
+var rode_nr = 36;
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
 
@@ -95,6 +97,18 @@ $.getJSON('php/age.php?adresse=' + adress, function(data) {
         }
     }).addTo(mymap);
 })
+$.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function(data2) {
+
+    nongeo = data2;
+    console.log(data2);
+    /*alert(data2);
+    var geojsonphp4 = new L.GeoJSON(data, {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup("<strong>" + feature.properties.rodenavn + "</strong><br/>")
+        }
+    }).addTo(mymap);
+*/
+})
 };
 
 /*
@@ -137,7 +151,9 @@ $.ajax({
 };
 */
 //function testfunction(){alert(adressedata)}
-function testfunction(){document.getElementById("showdata").innerHTML =  adressedata.features["0"].properties.adresse};
+function testfunction(){document.getElementById("showdata").innerHTML = adressedata.features["0"].properties.adresse,
+document.getElementById("showdata2").innerHTML = 'rode_nr: ' + nongeo["0"].rode_nr + ' rodenavn: ' + nongeo["0"].rodenavn
+};
      // document.getElementById("showdata").innerHTML =  data2.features.properties.adresse + data2.features.properties.vejnavn
 
     //var geojsonphp2 = new L.GeoJSON.addTo(mymap);
