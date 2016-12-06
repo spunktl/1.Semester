@@ -93,6 +93,13 @@
 
 <script>
 
+    var nongeo;
+    var adressedata;
+    var geojsonphp;
+    var adress = "Guldbergsgade 101";
+    var agedata;
+    var rode_nr = 36;
+
 
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
@@ -116,22 +123,19 @@
 
     //    load geoJson files-->
     //TEST WITH OTHER BASEMAP
-    $(document).ready(function(){
-        $.ajax({
-            type: "POST",
-            url: "php/park.php",
-            data: "adresse=gid",
-            success: function(msg){
-                //alert(msg);
-                //console.log(msg);
-                var geojsonphp2 = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-                    layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong><br/>")
+    function sqlfunction() {
+        //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
+        $.getJSON('php/Adressgetjson.php?adresse=' + adress, function (msg) {
+            console.log(msg);
+            adressedata = msg;
+            //alert(msg);
+            var geojsonphp3 = new L.GeoJSON(msg, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup("<strong>" + feature.properties.adresse + "</strong><br/>")
                 }
-                }).addTo(mymap);
-            }
+            }).addTo(mymap);
         });
-    });
-    ;
+    }
 
     //var geojsonphp2 = new L.GeoJSON.addTo(mymap);
 
