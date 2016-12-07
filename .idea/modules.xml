@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/1.Semester.iml" filepath="$PROJECT_DIR$/.idea/1.Semester.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../XAMPP/htdocs/PHP_leaflet_Postigs/.idea/PHP_leaflet_Postigs.iml" filepath="$PROJECT_DIR$/../../XAMPP/htdocs/PHP_leaflet_Postigs/.idea/PHP_leaflet_Postigs.iml" />
     </modules>
   </component>
 </project>
