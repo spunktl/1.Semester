@@ -1,120 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset= "utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Semester 1 Group Project</title>
-    <!--Leaflet-->
-    <!--include leaflet CSS-->
-    <link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
-	<script src="jquery/jquery-3.1.1.min.js"></script>
-    <!--include leaflet javascript file-->
-    <script src="lib/leaflet/leaflet.js"></script>
-	<script type="text/javascript" src="dist/leaflet.ajax.js"></script>
-	<!--include geosearch files-->
-	<link rel="stylesheet" href="lib/L.GeoSearch-develop/src/css/l.geosearch.css" />
-    <script src="lib/L.GeoSearch-develop/src/js/l.control.geosearch.js"></script>
-    <script src="lib/L.GeoSearch-develop/src/js/l.geosearch.provider.openstreetmap.js"></script>
-	<!--include geoJson file-->
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>Test search box</title>
     <style type="text/css">
-    <!--to get a full screen map-->
-        body {
-            padding: 0;
-            margin: 0;
-        }
-        html, body,#mapid{
-            height:100%;
-            width:100%;
-        }
+        html { height: 100% }
+        body { height: 100%; margin: 0px; padding: 0px }
+        #map_canvas { height: 100% }
     </style>
 
-    <script type=" text/javascript">
-        function addListeners() {
-            if(window.addEventListener){ // if the window.addEventListener function is available for use then we execute below code
-                document.getElementById('myradio').addEventListener("click", radio1func, false);
-            } else if (window.attachEvent) { //added for internet explorer previous to IE9
+    <!-- Google Maps and Places API -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9U7qO9nWmEO1X5t0ZOJ8kgfXYK1FEYiU&libraries=places"></script>
 
-            }
-            //Event listener functions
-            function radio1func () {
-                alert(this.id+":mouse-click makes script run"); // alert to be replaced by parks query
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        //declare namespace
+        var semester1 = {};
+
+        //declare map
+        var map;
+
+        //set the geocoder
+        var geocoder = new google.maps.Geocoder();
+
+        function trace(message)
+        {
+            if (typeof console != 'undefined')
+            {
+                console.log(message);
             }
         }
-        window.onload = addListeners; // when page is opened, addListeners function will fire off
+
+        //Function that gets run when the document loads
+        semester1.initialize = function()
+        {
+            var latlng = new google.maps.LatLng(55.676, 12.568);
+            var myOptions = {
+                zoom: 12,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        }
+
+        //geocode function
+        semester1.geocode = function()
+        {
+            var address = $('#address').val();
+            geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK)
+                {
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+
+
+                    var lat = results[0].geometry.location.lat();
+                    var lng = results[0].geometry.location.lng();
+
+                }
+                else
+                {
+                    alert("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        }
+
+        //load geoJson files-->
+        $(document).ready(function(){
+            $.ajax({
+                type: "POST",
+                url: "php/park.php",
+                data: "adresse=gid",
+                success: function (e) {
+                    alert(e);
+                },
+                error: function (er) {
+                    alert("Error: " + er);
+                }
+            });
+        });
+
+
     </script>
-
 </head>
+<body onload="semester1.initialize()">
 
-<body>
-<!--div element with id where you want your map to be-->
-<div id="mapid"></div>
+<!-- side panel div container -->
+<div style="position:absolute; width:380px; height: 100%; overflow:auto; float:left; padding-left:10px; padding-right:10px;">
+    <h1>Map Search</h1>
+    <!-- search box -->
+    <div style="border:1px solid #ccc; background:#e5e5e5; padding:10px;">
+        <input type="text" value="Type your address here" id="address">
+        <input type="button" value="search" onClick="semester1.geocode()">
+    </div>
+</div>
 
-<script type="text/javascript" src="http://leafletjs.com/examples/map-panes/eu-countries.js"></script>
-
-<script>
-
-
-    //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
-    var mymap = L.map('mapid').setView([55.676, 12.568], 12);
-	
-    <!--load a tile layer Mapbox Streets tile layer-->
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery � <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        id:'clarineo.23o81n9e',
-        accessToken:'pk.eyJ1IjoiY2xhcmluZW8iLCJhIjoiY2l2aDJocjZ0MDA1ajJvb3djeTdidWxyaSJ9.HVE2DplZgfv5T4FSUqah7A'
-    }).addTo(mymap);
-	
-	new L.Control.GeoSearch({
-        provider: new L.GeoSearch.Provider.OpenStreetMap(),
-        //showPopup: true
-    }).addTo(mymap);
-
-    mymap.on('geosearch_showlocation', function (result) {
-        L.marker([result.x, result.y]).addTo(mymap)
-    });
-
-
-    // Function to add all parks and automatically show when document loads
-$(document).ready(function(){
-$.ajax({
-	type: "POST",
-	url: "php/park.php",
-    //data: data,
-	success: function(msg){
-	//alert(msg);
-	console.log(msg);
-	var parklocations = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.kommune + "</strong><br/>")
-	  }
-	  }).addTo(mymap);
-	}
-	});
-});
-
-   /*    load geoJson files-->
-	var geojsonphp2 = new L.GeoJSON.AJAX(["php/age.php?adresse=text"],{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong><br/>")
-	//  }
-	//  }).addTo(mymap);
-//	 function onEachFeature( feature, layer){
-//      var popupContent = feature.properties.distriktsnavnrode;
-//	  layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong>)
-	 
-//TEST WITH OTHER BASEMAP
-//function onEachFeature(feature, layer) {
-    // does this feature have a property named popupContent?
- //   if (feature.properties && feature.properties.distriktsnavnrode) {
-  //      layer.bindPopup(feature.properties.distriktsnavnrode);
- //   }
-//}
-*/
-</script>
-
-<form name="formA">
-    <input type="radio" name="myradio" value="park"/>
-</form>
-
+<!-- map div container -->
+<div id="map_canvas" style="height:100%; margin-left:400px;"></div>
 </body>
 </html>
-

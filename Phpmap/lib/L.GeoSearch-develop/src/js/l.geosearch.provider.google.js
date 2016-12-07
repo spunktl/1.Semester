@@ -32,7 +32,7 @@ L.GeoSearch.Provider.Google = L.Class.extend({
     },
 
     loadMapsApi: function () {
-        var key = (typeof(this.options.key) !== 'undefined')? this.options.key : "YOUR_API_KEY";
+        var key = (typeof(this.options.key) !== 'undefined')? this.options.key : "AIzaSyA9U7qO9nWmEO1X5t0ZOJ8kgfXYK1FEYiU";
         var self = this;
         var url = "https://maps.googleapis.com/maps/api/js?key="+key+"&v=3&callback=onLoadGoogleApiCallback&sensor=false";
         var script = document.createElement('script');

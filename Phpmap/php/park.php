@@ -30,7 +30,7 @@ if (!$conn) {
 }
 
 # Build SQL SELECT statement and return the geometry as a GeoJSON element in EPSG: 4326
-$sql = "SELECT gid, st_asgeojson(geom) AS geojson FROM park";
+$sql = "SELECT gid, st_Asgeojson(geom) AS geojson FROM park";
 
 
 //echo $sql;
