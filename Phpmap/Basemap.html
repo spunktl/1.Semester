@@ -51,7 +51,6 @@
             <li><a href="#settings" role="tab"><i class="fa fa-cogs"></i></a></li>
         </ul>
     </div>
-    0
     <!-- Tab panes -->
     <div class="sidebar-content">
         <div class="sidebar-pane" id="home">
@@ -61,13 +60,16 @@
             </h1>
 
             <p>Enter an address in Copenhagen to get an analysis of the location:</p>
+            <p id="showdata"></p>
+            <p id="showdata2"></p>
 
-            <p>
             <form id="searchAddress">
-                <input type="text" />
-                <button> onclick="sqlfunction()">GO</button>
+                <input type="text" name="address"/>
+                <button onclick="sqlfunction()"> GO SQL! </button>
+                <button onclick="sqlgetjson"> sqlgetjson test </button>
+                <input type="text" onkeydown="testfunction()">
+
             </form>
-            </p>
 
             <p class="lorem">This is a web GIS application which uses the address you enter above and analyses it according to various geographic characteristics.</p>
 
