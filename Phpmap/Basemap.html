@@ -131,7 +131,7 @@
             //alert(msg);
             var geojsonphp3 = new L.GeoJSON(msg, {
                 onEachFeature: function (feature, layer) {
-                    layer.bindPopup("<strong>" + feature.properties.adresse + "</strong><br/>")
+                    layer.bindPopup("<strong>" + feature.properties.adress + "</strong><br/>")
                 }
             }).addTo(mymap);
         });
