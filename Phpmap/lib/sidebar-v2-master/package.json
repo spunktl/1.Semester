@@ -1,0 +1,39 @@
+{
+  "name": "sidebar-v2",
+  "version": "0.3.1",
+  "description": "A responsive sidebar for mapping libraries like Leaflet or OpenLayers",
+  "keywords": [
+    "gis",
+    "leaflet",
+    "map",
+    "openlayers"
+  ],
+  "homepage": "https://github.com/turbo87/sidebar-v2",
+  "bugs": "https://github.com/turbo87/sidebar-v2/issues",
+  "license": "MIT",
+  "author": "Tobias Bieniek <tobias.bieniek@gmx.de>",
+  "files": [
+    "css",
+    "js",
+    "scss"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/turbo87/sidebar-v2.git"
+  },
+  "scripts": {
+    "test": "gulp lint"
+  },
+  "devDependencies": {
+    "gulp": "~3.8.7",
+    "gulp-clean": "~0.3.1",
+    "gulp-concat": "~2.3.4",
+    "gulp-csslint": "~0.1.4",
+    "gulp-jshint": "~1.8.3",
+    "gulp-minify-css": "~0.3.7",
+    "gulp-rename": "~1.2.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-uglify": "~0.3.1",
+    "gulp-zip": "~0.5.0"
+  }
+}
