@@ -10,7 +10,6 @@
 	<script src="jquery/jquery-3.1.1.min.js"></script>
     <!--include leaflet javascript file-->
     <script src="lib/leaflet/leaflet.js"></script>
-    <script type="text/javascript" src="leaflet-ajax-2.1.0/dist/leaflet.ajax.js"></script>
 	<script>// type="text/javascript" src="dist/leaflet.ajax.js"></script>
 	<!--include geosearch files-->
 	<link rel="stylesheet" href="lib/L.GeoSearch-develop/src/css/l.geosearch.css" />
@@ -104,7 +103,7 @@ var agedata;
 var rode_nr = 36;
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
-	
+
     <!--load a tile layer Mapbox Streets tile layer-->
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery � <a href="http://mapbox.com">Mapbox</a>',
@@ -112,7 +111,7 @@ var rode_nr = 36;
         id:'clarineo.23o81n9e',
         accessToken:'pk.eyJ1IjoiY2xhcmluZW8iLCJhIjoiY2l2aDJocjZ0MDA1ajJvb3djeTdidWxyaSJ9.HVE2DplZgfv5T4FSUqah7A'
     }).addTo(mymap);
-	
+
 	new L.Control.GeoSearch({
         provider: new L.GeoSearch.Provider.OpenStreetMap(),
         showPopup: true
