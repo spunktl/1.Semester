@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6a5fdacd-f64c-4cc4-a42d-5156f54d3eea" name="Default" comment="0.4 (adress search)">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Phpmap/lib/da_popgraph_2015.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Phpmap/lib/canvasjs.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Phpmap/socio.php" />
+    <list default="true" id="6a5fdacd-f64c-4cc4-a42d-5156f54d3eea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Phpmap/Basemap.html" afterPath="$PROJECT_DIR$/Phpmap/Basemap.html" />
     </list>
     <ignored path="1Semester.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -378,7 +374,14 @@
       <option name="project" value="LOCAL" />
       <updated>1481280694348</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="0.5 (Chart merged)">
+      <created>1481285526404</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1481285526404</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -438,7 +441,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="0.4 (adress search)" />
-    <option name="LAST_COMMIT_MESSAGE" value="0.4 (adress search)" />
+    <MESSAGE value="0.5 (Chart merged)" />
+    <option name="LAST_COMMIT_MESSAGE" value="0.5 (Chart merged)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
