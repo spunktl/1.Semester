@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="lib/jquery-ui/themes/start/theme.css">
     <script src="lib/jquery-ui/jquery-ui.js"></script>
     <script src="lib/autocomplete-0.4.1/dawa-autocomplete.js"></script>
+    <!---graph-->
+    <script src="lib/canvasjs.min.js"></script>
     <!--include geoJson file-->
     <style type="text/css">
     <!--to get a full screen map-->
@@ -49,6 +51,7 @@
             <li><a href="#home" role="tab"><i class="fa fa-search"></i></a></li>
             <li><a href="#ageStructure" role="tab"><i class="fa fa-bar-chart"></i></a></li>
             <li><a href="#parks" role="tab"><i class="fa fa-leaf"></i></a></li>
+            <li><a href="#transit" role="tab"><i class="fa fa-train"></i></a></li>
             <li><a href="https://github.com/spunktl/1.Semester" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
         </ul>
 
@@ -61,12 +64,11 @@
     <div class="sidebar-content">
         <div class="sidebar-pane" id="home">
             <h1 class="sidebar-header">
-                Sidebar
+                search address
                 <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
             </h1>
 
-            <p>Adress search</p>
-
+            <p>Enter an address in Copenhagen to get an analysis of the location:</p>
 
             <!-- Autocomplete adress search line -->
             <p><label for="adgangsadresse-autocomplete">Autocomplete af adresse i københavn</label></p>
@@ -78,17 +80,26 @@
             <p id="showdata"></p>
             <p id="showdata2"></p>
 
+            <p class="lorem">This is a web GIS application which uses the address you enter above and analyses it according to various geographic characteristics.</p>
 
+            <p class="lorem">In the initial stage, we have decided to use proximity to parks and green spaces as one variable, and the age structure of the city block as another.</p>
+
+            <p class="lorem">These two variables represent two different types of data: distance to services (vector) and area characteristics (raster). In the future other datasets will be added to expand the analysis.</p>
 
 
         </div>
 
-        <div class="sidebar-pane" id="profile">
-            <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        <div class="sidebar-pane" id="ageStructure">
+            <div id="chartContainer" style="position: absolute; padding-top: 50px"></div>
+            <h1 class="sidebar-header">age structure<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+
         </div>
 
-        <div class="sidebar-pane" id="messages">
-            <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        <div class="sidebar-pane" id="parks">
+            <h1 class="sidebar-header">parks in the area<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        </div>
+        <div class="sidebar-pane" id="transit">
+            <h1 class="sidebar-header">transit nearby<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
         </div>
 
         <div class="sidebar-pane" id="settings">
@@ -209,6 +220,50 @@ function testfunction(){document.getElementById("showdata").innerHTML = adressed
 document.getElementById("showdata2").innerHTML = 'rode_nr: ' + nongeo["0"].rode_nr + ' rodenavn: ' + nongeo["0"].rodenavn
 };
 
+
+    // Get the socio data from the database
+var socioData;
+$.getJSON('socio.php?rode_nr=' + rode_nr, function(data5) {
+        socioData = data5.data
+    console.log(socioData);
+    //Create chart to be displayed in chartContainer
+    var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "theme2",
+            animationEnabled: true,
+            width:300,
+            title: {
+                text: "age groups %"
+            },
+            data: [
+                {
+                    type: "column",
+                    dataPoints: socioData
+                }
+            ]
+        });
+        chart.render();
+});
+
+
+/*
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "theme2",
+            animationEnabled: true,
+            width:300,
+            title: {
+                text: "age groups %"
+            },
+            data: [
+                {
+                    type: "column",
+                    dataPoints: socioData
+                }
+            ]
+        });
+        chart.render();
+    });
+*/
 </script>
 </body>
 </html>
