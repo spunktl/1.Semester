@@ -19,6 +19,12 @@
     <script src="https://use.fontawesome.com/fea527cdc3.js"></script>
     <link rel="stylesheet" href="lib/sidebar-v2-master/css/leaflet-sidebar.css" />
     <script type="text/javascript" src="lib/sidebar-v2-master/js/leaflet-sidebar.js"></script>
+    <!--Load Dawa autocomplete-->
+    <link rel="stylesheet" href="lib/jquery-ui/themes/start/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery-ui/themes/start/theme.css">
+    <script src="lib/jquery-ui/jquery-ui.js"></script>
+
+    <script src="lib/autocomplete-0.4.1/dawa-autocomplete.js"></script>
     <!--include geoJson file-->
     <style type="text/css">
     <!--to get a full screen map-->
@@ -30,6 +36,9 @@
             height:100%;
             width:100%;
         }
+
+        .ui-front {z-index: 9999999 !important;  }
+
     </style>
 </head>
 <body>
@@ -53,19 +62,26 @@
     <div class="sidebar-content">
         <div class="sidebar-pane" id="home">
             <h1 class="sidebar-header">
-                sidebar-v2
+                Sidebar
                 <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
             </h1>
 
-            <p>A responsive sidebar for mapping libraries like <a href="http://leafletjs.com/">Leaflet</a> or <a href="http://openlayers.org/">OpenLayers</a>.</p>
+            <p>Adress search</p>
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <!-- Autocomplete adress search line -->
+            <p><label for="adgangsadresse-autocomplete">Autocomplete af adresse i københavn</label></p>
+            <input type="text" id="adgangsadresse-autocomplete" style="width: 400px;">
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <button type="button" onclick=testfunction()>Show data (temporary)!</button>
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p class="lorem">DATA</p>
+            <p id="showdata"></p>
+            <p id="showdata2"></p>
+
+
+
+
         </div>
 
         <div class="sidebar-pane" id="profile">
@@ -83,25 +99,38 @@
 </div>
 
 <!--div element with id where you want your map to be-->
-<h1>MAP WITH A BUTTON</h1>
-<p id="showdata"></p>
-<p id="showdata2"></p>
-<button onclick="sqlfunction()"> GO SQL! </button>
-<button onclick="sqlgetjson"> sqlgetjson test </button>
-<!-- TEST FUNCTION-->
-<input type="text" onkeydown="testfunction()">
+<h1>Adress Information Map</h1>
+
 
 <div id="mapid"></div>
 
-<script type="text/javascript" src="http://leafletjs.com/examples/map-panes/eu-countries.js"></script>
-<script>
 
+<script>
 var nongeo;
 var adressedata;
 var geojsonphp;
-var adress = "Guldbergsgade 101";
+var adress;
 var agedata;
 var rode_nr = 36;
+
+//Autocomplete search function
+$('#adgangsadresse-autocomplete').dawaautocomplete({
+  baseUrl: 'http://dawa.aws.dk',
+  minLength: 2,
+  adgangsadresserOnly: true,
+  params: {kommunekode: 101},
+  select: function(event, input) {
+      adress = input.tekst;
+      console.log(input);
+
+    // denne funktion bliver kaldt når brugeren vælger en adresse.
+  },
+  error: function(xhr, status, error) {
+    // denne funktion bliver kaldt ved fejl
+  }
+});
+
+
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
 
@@ -120,9 +149,20 @@ var rode_nr = 36;
 
     var sidebar = L.control.sidebar('sidebar', {position: 'right'}).addTo(mymap);
 
-
-    //    load geoJson files-->
-//TEST WITH OTHER BASEMAP
+var runsqlfunction = document.getElementById("adgangsadresse-autocomplete");
+runsqlfunction.addEventListener("keydown", function (enter) {
+    if (enter.keyCode === 13) {
+        validate(enter);
+    }
+});
+function validate(enter) {sqlfunction()};
+/*
+function1(someVariable).then(function() {
+    function2(someOtherVariable);
+}).then(function() {
+    function3();
+});
+*/
 function sqlfunction(){
     //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
 $.getJSON('php/Adressgetjson.php?adresse=' + adress, function(msg){
@@ -133,12 +173,11 @@ $.getJSON('php/Adressgetjson.php?adresse=' + adress, function(msg){
      layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
 	  }
 	  }).addTo(mymap);
+    mymap.setView(new L.LatLng(msg.features["0"].geometry.coordinates["1"], msg.features["0"].geometry.coordinates["0"]), 14, {animation: true});
 
 
-//document.getElementById("showdata").innerHTML =  adressedata.features["0"].properties.adresse;
-})
+    })
 
-//function sqlfunction(){
     //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
 $.getJSON('php/age.php?adresse=' + adress, function(data) {
 
@@ -151,6 +190,19 @@ $.getJSON('php/age.php?adresse=' + adress, function(data) {
         }
     }).addTo(mymap);
 })
+
+$.getJSON('php/park.php?adresse=' + adress, function(park){
+
+        parkdata = park;
+        console.log(parkdata);
+        //alert(msg);
+	var geojsonphp4 = new L.GeoJSON(park,{onEachFeature:function( feature, layer ){
+     layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
+	  }
+	  }).addTo(mymap);
+
+    })
+
 $.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function(data2) {
 
     nongeo = data2;
@@ -162,52 +214,20 @@ $.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function(data2) {
         }
     }).addTo(mymap);
 */
+
+    console.log("Succesfull SQL load")
 })
 };
 
-/*
-function sqlfunction1(){
-$.ajax({
-	type: "POST",
-	url: "php/Adress.php",
-	data: adress,
-	success: function(msg){
-        adressedata = msg;
-        //alert(msg);
-	console.log(msg);
-	var geojsonphp2 = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
-	  }
-	  }).addTo(mymap);
-        //TEST 2 - function from start
-        //
-        //alert(data2);}
-        //var DATA = JSON.parse(msg);
-     //   function test3()
-document.getElementById("showdata").innerHTML = adressedata;
-//document.getElementById("showdata").innerHTML =  DATA.features.properties.adresse + DATA.features.properties.vejnavn;
-	}
-	});
-$.ajax({
-	type: "POST",
-	url: "php/Age.php",
-	data: "rodenavn=rodenavn",
-	success: function(msg){
-	//alert(msg);
-	console.log(msg);
-        var geojsonphp = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.rodenavn + "</strong><br/>")
-	  }
-	  }).addTo(mymap);
-	}
-    });
-
-};
-*/
-//function testfunction(){alert(adressedata)}
 function testfunction(){document.getElementById("showdata").innerHTML = adressedata.features["0"].properties.adresse,
 document.getElementById("showdata2").innerHTML = 'rode_nr: ' + nongeo["0"].rode_nr + ' rodenavn: ' + nongeo["0"].rodenavn
 };
+
+//function testfunction(){alert(adressedata)}
+//document.getElementById("sqlbutton").addEventListener("click",
+
+
+
      // document.getElementById("showdata").innerHTML =  data2.features.properties.adresse + data2.features.properties.vejnavn
 
     //var geojsonphp2 = new L.GeoJSON.addTo(mymap);

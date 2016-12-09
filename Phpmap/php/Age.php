@@ -42,7 +42,7 @@ if (empty($_GET['adresse'])) {
 # Build SQL SELECT statement and return the geometry as a GeoJSON element in EPSG: 4326
 $sql = "SELECT socio_data.rode_nr, socio_data.rodenavn, st_asgeojson(socio_data.geom) AS geojson
 FROM socio_data, adresser WHERE ST_intersects(adresser.geom, socio_data.geom)
-AND (adresser.vejnavn || ' ' || adresser.husnr) = '" . $adresse . "' limit 1";
+AND (adresser.vejnavn || ' ' || adresser.husnr || ', ' || adresser.postnr || ' ' || adresser.postnrnavn) = '" . $adresse . "' limit 1";
 
 //$_POST['adresse']
 // . pg_escape_string( $_POST['adresse'] ) . 
