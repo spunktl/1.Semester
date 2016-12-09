@@ -22,6 +22,8 @@
     <script src="https://use.fontawesome.com/fea527cdc3.js"></script>
     <link rel="stylesheet" href="lib/sidebar-v2-master/css/leaflet-sidebar.css" />
     <script type="text/javascript" src="lib/sidebar-v2-master/js/leaflet-sidebar.js"></script>
+    <!---graph-->
+    <script src="lib/canvasjs.min.js"></script>
     <!--include geoJson file-->
     <style type="text/css">
     <!--to get a full screen map-->
@@ -44,6 +46,7 @@
             <li><a href="#home" role="tab"><i class="fa fa-search"></i></a></li>
             <li><a href="#ageStructure" role="tab"><i class="fa fa-bar-chart"></i></a></li>
             <li><a href="#parks" role="tab"><i class="fa fa-leaf"></i></a></li>
+            <li><a href="#transit" role="tab"><i class="fa fa-train"></i></a></li>
             <li><a href="https://github.com/spunktl/1.Semester" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
         </ul>
 
@@ -79,13 +82,16 @@
         </div>
 
         <div class="sidebar-pane" id="ageStructure">
+            <div id="chartContainer" style="position: absolute; padding-top: 50px"></div>
             <h1 class="sidebar-header">age structure<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            <img src="lib/da_popgraph_2015.png" alt="population graph" style="width:200px;height:180px;" />
 
         </div>
 
         <div class="sidebar-pane" id="parks">
             <h1 class="sidebar-header">parks in the area<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        </div>
+        <div class="sidebar-pane" id="transit">
+            <h1 class="sidebar-header">transit nearby<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
         </div>
 
         <div class="sidebar-pane" id="settings">
@@ -112,7 +118,7 @@
     var geojsonphp;
     var adress = "Guldbergsgade 101";
     var agedata;
-    var rode_nr = 36;
+    var rode_nr = 50;
 
 
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
@@ -137,39 +143,40 @@
 
     //    load geoJson files-->
 //TEST WITH OTHER BASEMAP
-function sqlfunction(){
+function sqlfunction() {
     //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
-$.getJSON('php/Adressgetjson.php?adresse=' + adress, function(msg){
-    console.log(msg);
+    $.getJSON('php/Adressgetjson.php?adresse=' + adress, function (msg) {
+        console.log(msg);
         adressedata = msg;
         //alert(msg);
-	var geojsonphp3 = new L.GeoJSON(msg,{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
-	  }
-	  }).addTo(mymap);
+        var geojsonphp3 = new L.GeoJSON(msg, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup("<strong>" + feature.properties.adresse + "</strong><br/>")
+            }
+        }).addTo(mymap);
 
 
 //document.getElementById("showdata").innerHTML =  adressedata.features["0"].properties.adresse;
-})
+    })
 
 //function sqlfunction(){
     //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
-$.getJSON('php/age.php?adresse=' + adress, function(data) {
+    $.getJSON('php/age.php?adresse=' + adress, function (data) {
 
-    agedata = data;
-    console.log(agedata);
-    //alert(msg);
-    var geojsonphp4 = new L.GeoJSON(data, {
-        onEachFeature: function (feature, layer) {
-            layer.bindPopup("<strong>" + feature.properties.rodenavn + "</strong><br/>")
-        }
-    }).addTo(mymap);
-})
-$.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function(data2) {
+        agedata = data;
+        console.log(agedata);
+        //alert(msg);
+        var geojsonphp4 = new L.GeoJSON(data, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup("<strong>" + feature.properties.rodenavn + "</strong><br/>")
+            }
+        }).addTo(mymap);
+    })
+    $.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function (data2) {
 
-    nongeo = data2;
-    console.log(data2);
-    /*alert(data2);
+        nongeo = data2;
+        console.log(data2);
+        /*alert(data2);
     var geojsonphp4 = new L.GeoJSON(data, {
         onEachFeature: function (feature, layer) {
             layer.bindPopup("<strong>" + feature.properties.rodenavn + "</strong><br/>")
@@ -177,9 +184,8 @@ $.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function(data2) {
     }).addTo(mymap);
 */
 })
-};
-
-/*
+    }
+    /*
 function sqlfunction1(){
 $.ajax({
 	type: "POST",
@@ -237,7 +243,6 @@ document.getElementById("showdata2").innerHTML = 'rode_nr: ' + nongeo["0"].rode_
             }).addTo(mymap);
         });
     }
-
     //var geojsonphp2 = new L.GeoJSON.addTo(mymap);
 
 
@@ -258,6 +263,40 @@ document.getElementById("showdata2").innerHTML = 'rode_nr: ' + nongeo["0"].rode_
  //   }
 //}
 */
+    // Get the socio data from the database
+    var socioData;
+    $.getJSON('socio.php?rode_nr=' + rode_nr, function(data2) {
+        socioData = data2.data
+    })
+
+    console.log(socioData);
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "theme2",
+            animationEnabled: true,
+            width:300,
+            title: {
+                text: "age groups %"
+            },
+            data: [
+                {
+                    type: "column",
+                    dataPoints: socioData
+                }
+            ]
+        });
+        chart.render();
+    });
+//var chartData = [
+//    { y: 9.21, label: "0-5" },
+//    { y: 11.45, label: "6-17" },
+//    { y: 3.88, label: "18-29" },
+//    { y: 14.06, label: "30-39" },
+//    { y: 15.91, label: "40-49" },
+//    { y: 24.15, label: "50-64" },
+//    { y: 21.34, label: "65+" }
+//]
+
 </script>
 </body>
 </html>
