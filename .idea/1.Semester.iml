@@ -6,6 +6,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="PHP_leaflet_Postigs" />
     <orderEntry type="module" module-name="PHP_leaflet_Postigs" />
+    <orderEntry type="module" module-name="Phpmap" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

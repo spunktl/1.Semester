@@ -10,20 +10,25 @@
 	<script src="jquery/jquery-3.1.1.min.js"></script>
     <!--include leaflet javascript file-->
     <script src="lib/leaflet/leaflet.js"></script>
-<<<<<<< HEAD
 	<script>// type="text/javascript" src="dist/leaflet.ajax.js"></script>
-=======
-    <script type="text/javascript" src="leaflet-ajax-2.1.0/dist/leaflet.ajax.js"></script>
->>>>>>> sidebar
 	<!--include geosearch files-->
 	<link rel="stylesheet" href="lib/L.GeoSearch-develop/src/css/l.geosearch.css" />
     <script src="lib/L.GeoSearch-develop/src/js/l.control.geosearch.js"></script>
     <script src="lib/L.GeoSearch-develop/src/js/l.geosearch.provider.openstreetmap.js"></script>
     <!--include sidebar files-->
+    <script src="https://use.fontawesome.com/fea527cdc3.js"></script>
     <link rel="stylesheet" href="lib/sidebar-v2-master/css/leaflet-sidebar.css" />
     <script type="text/javascript" src="lib/sidebar-v2-master/js/leaflet-sidebar.js"></script>
+    <!--Load Dawa autocomplete-->
+    <link rel="stylesheet" href="lib/jquery-ui/themes/start/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery-ui/themes/start/theme.css">
+    <script src="lib/jquery-ui/jquery-ui.js"></script>
+    <script src="lib/autocomplete-0.4.1/dawa-autocomplete.js"></script>
+    <!---graph-->
+    <script src="lib/canvasjs.min.js"></script>
     <!--include geoJson file-->
     <style type="text/css">
+    <!--to get a full screen map-->
         body {
             padding: 0;
             margin: 0;
@@ -32,20 +37,22 @@
             height:100%;
             width:100%;
         }
+
+        .ui-front {z-index: 9999999 !important;  }
+
     </style>
-
 </head>
-
 <body>
 
 <div id="sidebar" class="sidebar collapsed">
     <!-- Nav tabs -->
     <div class="sidebar-tabs">
         <ul role="tablist">
-            <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-            <li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
-            <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
-            <li><a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+            <li><a href="#home" role="tab"><i class="fa fa-search"></i></a></li>
+            <li><a href="#ageStructure" role="tab"><i class="fa fa-bar-chart"></i></a></li>
+            <li><a href="#parks" role="tab"><i class="fa fa-leaf"></i></a></li>
+            <li><a href="#transit" role="tab"><i class="fa fa-train"></i></a></li>
+            <li><a href="https://github.com/spunktl/1.Semester" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
         </ul>
 
         <ul role="tablist">
@@ -57,27 +64,42 @@
     <div class="sidebar-content">
         <div class="sidebar-pane" id="home">
             <h1 class="sidebar-header">
-                sidebar-v2
+                search address
                 <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
             </h1>
 
-            <p>A responsive sidebar for mapping libraries like <a href="http://leafletjs.com/">Leaflet</a> or <a href="http://openlayers.org/">OpenLayers</a>.</p>
+            <p>Enter an address in Copenhagen to get an analysis of the location:</p>
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <!-- Autocomplete adress search line -->
+            <p><label for="adgangsadresse-autocomplete">Autocomplete af adresse i københavn</label></p>
+            <input type="text" id="adgangsadresse-autocomplete" style="width: 400px;">
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <button type="button" onclick=testfunction()>Show data (temporary)!</button>
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p class="lorem">DATA</p>
+            <p id="showdata"></p>
+            <p id="showdata2"></p>
 
-            <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p class="lorem">This is a web GIS application which uses the address you enter above and analyses it according to various geographic characteristics.</p>
+
+            <p class="lorem">In the initial stage, we have decided to use proximity to parks and green spaces as one variable, and the age structure of the city block as another.</p>
+
+            <p class="lorem">These two variables represent two different types of data: distance to services (vector) and area characteristics (raster). In the future other datasets will be added to expand the analysis.</p>
+
+
         </div>
 
-        <div class="sidebar-pane" id="profile">
-            <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        <div class="sidebar-pane" id="ageStructure">
+            <div id="chartContainer" style="position: absolute; padding-top: 50px"></div>
+            <h1 class="sidebar-header">age structure<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+
         </div>
 
-        <div class="sidebar-pane" id="messages">
-            <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        <div class="sidebar-pane" id="parks">
+            <h1 class="sidebar-header">parks in the area<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+        </div>
+        <div class="sidebar-pane" id="transit">
+            <h1 class="sidebar-header">transit nearby<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
         </div>
 
         <div class="sidebar-pane" id="settings">
@@ -87,25 +109,38 @@
 </div>
 
 <!--div element with id where you want your map to be-->
-<h1>MAP WITH A BUTTON</h1>
-<p id="showdata"></p>
-<p id="showdata2"></p>
-<button onclick="sqlfunction()"> GO SQL! </button>
-<button onclick="sqlgetjson"> sqlgetjson test </button>
-<!-- TEST FUNCTION-->
-<input type="text" onkeydown="testfunction()">
+<h1>Adress Information Map</h1>
+
 
 <div id="mapid"></div>
 
-<script type="text/javascript" src="http://leafletjs.com/examples/map-panes/eu-countries.js"></script>
+
 <script>
-//test
 var nongeo;
 var adressedata;
 var geojsonphp;
-var adress = "Guldbergsgade 101";
+var adress;
 var agedata;
 var rode_nr = 36;
+
+//Autocomplete search function
+$('#adgangsadresse-autocomplete').dawaautocomplete({
+  baseUrl: 'http://dawa.aws.dk',
+  minLength: 2,
+  adgangsadresserOnly: true,
+  params: {kommunekode: 101},
+  select: function(event, input) {
+      adress = input.tekst;
+      console.log(input);
+
+    // denne funktion bliver kaldt når brugeren vælger en adresse.
+  },
+  error: function(xhr, status, error) {
+    // denne funktion bliver kaldt ved fejl
+  }
+});
+
+
     //		<!--initialize the map and set its view to chosen geographical coordinates and zoom level-->
     var mymap = L.map('mapid').setView([55.676, 12.568], 12);
 
@@ -124,9 +159,14 @@ var rode_nr = 36;
 
     var sidebar = L.control.sidebar('sidebar', {position: 'right'}).addTo(mymap);
 
+var runsqlfunction = document.getElementById("adgangsadresse-autocomplete");
+runsqlfunction.addEventListener("keydown", function (enter) {
+    if (enter.keyCode === 13) {
+        validate(enter);
+    }
+});
+function validate(enter) {sqlfunction()};
 
-    //    load geoJson files-->
-//TEST WITH OTHER BASEMAP
 function sqlfunction(){
     //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
 $.getJSON('php/Adressgetjson.php?adresse=' + adress, function(msg){
@@ -137,12 +177,11 @@ $.getJSON('php/Adressgetjson.php?adresse=' + adress, function(msg){
      layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
 	  }
 	  }).addTo(mymap);
+    mymap.setView(new L.LatLng(msg.features["0"].geometry.coordinates["1"], msg.features["0"].geometry.coordinates["0"]), 14, {animation: true});
 
 
-//document.getElementById("showdata").innerHTML =  adressedata.features["0"].properties.adresse;
-})
+    })
 
-//function sqlfunction(){
     //getJSON - adress being the variable for thr SQL that gets inserted in the PHP document we call.
 $.getJSON('php/age.php?adresse=' + adress, function(data) {
 
@@ -155,89 +194,75 @@ $.getJSON('php/age.php?adresse=' + adress, function(data) {
         }
     }).addTo(mymap);
 })
+
+$.getJSON('php/park.php?adresse=' + adress, function(park){
+
+        parkdata = park;
+        console.log(parkdata);
+        //alert(msg);
+	var geojsonphp4 = new L.GeoJSON(park,{onEachFeature:function( feature, layer ){
+     layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
+	  }
+	  }).addTo(mymap);
+
+    })
+
 $.getJSON('php/nongeo.php?rode_nr=' + rode_nr, function(data2) {
 
     nongeo = data2;
     console.log(data2);
-    /*alert(data2);
-    var geojsonphp4 = new L.GeoJSON(data, {
-        onEachFeature: function (feature, layer) {
-            layer.bindPopup("<strong>" + feature.properties.rodenavn + "</strong><br/>")
-        }
-    }).addTo(mymap);
-*/
+
+    console.log("Succesfull SQL load")
 })
 };
 
-/*
-function sqlfunction1(){
-$.ajax({
-	type: "POST",
-<<<<<<< HEAD
-	url: "php/Adress.php",
-	data: adress,
-=======
-	url: "php/park.php",
-	data: "adresse=gid",
->>>>>>> sidebar
-	success: function(msg){
-        adressedata = msg;
-        //alert(msg);
-	console.log(msg);
-	var geojsonphp2 = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.adresse + "</strong><br/>")
-	  }
-	  }).addTo(mymap);
-        //TEST 2 - function from start
-        //
-        //alert(data2);}
-        //var DATA = JSON.parse(msg);
-     //   function test3()
-document.getElementById("showdata").innerHTML = adressedata;
-//document.getElementById("showdata").innerHTML =  DATA.features.properties.adresse + DATA.features.properties.vejnavn;
-	}
-	});
-$.ajax({
-	type: "POST",
-	url: "php/Age.php",
-	data: "rodenavn=rodenavn",
-	success: function(msg){
-	//alert(msg);
-	console.log(msg);
-        var geojsonphp = new L.GeoJSON(jQuery.parseJSON(msg),{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.rodenavn + "</strong><br/>")
-	  }
-	  }).addTo(mymap);
-	}
-    });
-
-};
-*/
-//function testfunction(){alert(adressedata)}
 function testfunction(){document.getElementById("showdata").innerHTML = adressedata.features["0"].properties.adresse,
 document.getElementById("showdata2").innerHTML = 'rode_nr: ' + nongeo["0"].rode_nr + ' rodenavn: ' + nongeo["0"].rodenavn
 };
-     // document.getElementById("showdata").innerHTML =  data2.features.properties.adresse + data2.features.properties.vejnavn
-
-    //var geojsonphp2 = new L.GeoJSON.addTo(mymap);
 
 
-   /*    load geoJson files-->
-	var geojsonphp2 = new L.GeoJSON.AJAX(["php/age.php?adresse=text"],{onEachFeature:function( feature, layer ){
-     layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong><br/>")
-	//  }
-	//  }).addTo(mymap);
-//	 function onEachFeature( feature, layer){
-//      var popupContent = feature.properties.distriktsnavnrode;
-//	  layer.bindPopup( "<strong>" + feature.properties.distriktsnavnrode + "</strong>)
+    // Get the socio data from the database
+var socioData;
+$.getJSON('socio.php?rode_nr=' + rode_nr, function(data5) {
+        socioData = data5.data
+    console.log(socioData);
+    //Create chart to be displayed in chartContainer
+    var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "theme2",
+            animationEnabled: true,
+            width:300,
+            title: {
+                text: "age groups %"
+            },
+            data: [
+                {
+                    type: "column",
+                    dataPoints: socioData
+                }
+            ]
+        });
+        chart.render();
+});
 
-//TEST WITH OTHER BASEMAP
-//function onEachFeature(feature, layer) {
-    // does this feature have a property named popupContent?
- //   if (feature.properties && feature.properties.distriktsnavnrode) {
-  //      layer.bindPopup(feature.properties.distriktsnavnrode);
- //   }
-//}
+
+/*
+    $(function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "theme2",
+            animationEnabled: true,
+            width:300,
+            title: {
+                text: "age groups %"
+            },
+            data: [
+                {
+                    type: "column",
+                    dataPoints: socioData
+                }
+            ]
+        });
+        chart.render();
+    });
 */
 </script>
 </body>
